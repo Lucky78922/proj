@@ -22,6 +22,35 @@ public class Bullet : MonoBehaviour
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             transform.GetChild(0).rotation = Quaternion.AngleAxis(angle, Vector3.forward);
             transform.position = Vector3.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
+            Collider[] colliders = Physics.OverlapSphere(transform.position, 1f);
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                Bullet inny = colliders[i].GetComponent<Bullet>();
+                if (inny)
+                {
+                    if (inny?.endState != endState && endState==state.player)
+                    {
+                        if (minusPoints < inny.minusPoints)
+                        {
+                            inny.minusPoints-=minusPoints;
+                            if (transform.GetChild(1))
+                                if (transform.GetChild(1).GetChild(0))
+                                    transform.GetChild(1).GetChild(0).GetComponent<Text>().text = minusPoints.ToString();
+                            Destroy(gameObject);
+                            break;
+                        }
+                        else
+                        {
+                            minusPoints -= inny.minusPoints;
+                            if (transform.GetChild(1))
+                                if (transform.GetChild(1).GetChild(0))
+                                    transform.GetChild(1).GetChild(0).GetComponent<Text>().text = minusPoints.ToString();
+                            Destroy(inny.gameObject);
+                            break;
+                        }
+                    }
+                }
+            }
             yield return null;
         }
         if (startState != target.GetComponent<Point>().state) target.GetComponent<Point>().points -= minusPoints;

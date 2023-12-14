@@ -57,7 +57,7 @@ public class Point : MonoBehaviour {
 				}
 				else {
 					int g = Random.RandomRange(1, 100);
-					if (g%25 == 3) {
+					if (g%25%2==1) {
 						Bullet go = Instantiate(move.bulletPref, transform.position, Quaternion.identity).GetComponent<Bullet>();
 						move.SetStatekDatas(go,this,Random.Range(1,2));
 					}

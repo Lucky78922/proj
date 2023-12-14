@@ -11,7 +11,7 @@ public class CamMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
 	public Point[] points;
 	Ray _ray;
 	RaycastHit _hit;
-	void Awake() => Application.targetFrameRate = 3000;
+	void Awake() => Application.targetFrameRate = 30;
 	public IEnumerator TextControl(SpriteRenderer text, int number) {
 		string numberString = Math.Abs(number).ToString();
 		if (numberString.Length == 1) numberString = 0+numberString;
@@ -62,12 +62,15 @@ public class CamMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
 						if (StartPoint.GetComponent<Point>().lines.linesId[i].idd == int.Parse(EndPoint.name.Split(' ')[1])) {
 							have = true;
 							Bullet go = Instantiate(bulletPref, EndPoint.transform.position, Quaternion.identity).GetComponent<Bullet>();
+							if (go == null) return;
 							go.target = StartPoint;
 							go.minusPoints = EndPoint.GetComponent<Point>().points;
 							go.endState = state.player;
 							go.startState = state.player;
 							go.spriteId = StartPoint.GetComponent<Point>().sprite_id;
-							go.transform.GetChild(1).GetChild(0).GetComponent<Text>().text = go.minusPoints.ToString();
+							if (go.transform.GetChild(1)) 
+								if (go.transform.GetChild(1).GetChild(0))
+									go.transform.GetChild(1).GetChild(0).GetComponent<Text>().text = go.minusPoints.ToString();
 							go.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite = go.sprites[(int)go.startState-2];
 							StartPoint.transform.GetChild(1).gameObject.SetActive(false);
 							EndPoint.transform.GetChild(1).gameObject.SetActive(false);
@@ -97,4 +100,5 @@ public class CamMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
 		go.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite = go.sprites[(int)go.startState];
 		p.points = 0;
 	}
+	public void ChangeTimeSpeed(float speed)=>Time.timeScale = speed;
 }

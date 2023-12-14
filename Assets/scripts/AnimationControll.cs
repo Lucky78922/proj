@@ -16,9 +16,12 @@ public class AnimationControll: MonoBehaviour
     [SerializeField] private Team team;
     private Animator anim;
     // Start is called before the first frame update
-    void Start()=> anim = GetComponent<Animator>();
+    void Start()
+    {
+        anim = GetComponent<Animator>();
+    }
 
-    void Update()
+    private void Update()
     {
         ChangeSize(size);
         ChangeTeam(team);
